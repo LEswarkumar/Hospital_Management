@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration - HMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-back:hover {
+            color: #764ba2;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .id-type-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .id-type-section h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .id-type-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .id-type-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .id-type-option input[type="radio"] {
+            width: auto;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .medical-history {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .medical-history h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .condition-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .condition-item input {
+            flex: 1;
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+        }
+
+        .emergency-contact {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .emergency-contact h4 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .patient-info {
+            background: #e7f3ff;
+            border: 2px solid #b3d9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .patient-info h4 {
+            color: #0056b3;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .patient-info p {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .patient-info strong {
+            color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .id-type-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .condition-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .condition-item input {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="#" class="nav-back" onclick="goBack()">← Back to Main Page</a>
+
+        <div class="header">
+            <h1>Patient Registration</h1>
+            <p>Register to book appointments and manage your health records</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            Registration successful! You can now book appointments with doctors.
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Please fill in all required fields correctly.
+        </div>
+
+        <form id="patientRegistrationForm">
+            <div class="form-section">
+                <h3>Personal Information</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender <span class="required">*</span></label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address <span class="required">*</span></label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Identification</h3>
+
+                <div class="id-type-section">
+                    <h4>ID Type <span class="required">*</span></h4>
+                    <div class="id-type-options">
+                        <div class="id-type-option">
+                            <input type="radio" id="aadhar" name="idType" value="aadhar" required>
+                            <label for="aadhar">Aadhar Card</label>
+                        </div>
+                        <div class="id-type-option">
+                            <input type="radio" id="passport" name="idType" value="passport">
+                            <label for="passport">Passport</label>
+                        </div>
+                        <div class="id-type-option">
+                            <input type="radio" id="drivinglicense" name="idType" value="drivinglicense">
+                            <label for="drivinglicense">Driving License</label>
+                        </div>
+                        <div class="id-type-option">
+                            <input type="radio" id="votercard" name="idType" value="votercard">
+                            <label for="votercard">Voter ID Card</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idNumber">ID Number <span class="required">*</span></label>
+                        <input type="text" id="idNumber" name="idNumber" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Medical Information</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bloodGroup">Blood Group</label>
+                        <select id="bloodGroup" name="bloodGroup">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" name="height" min="30" max="300">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" min="1" max="500">
+                    </div>
+                    <div class="form-group">
+                        <label for="occupation">Occupation</label>
+                        <input type="text" id="occupation" name="occupation">
+                    </div>
+                </div>
+
+                <div class="medical-history">
+                    <h4>Medical History</h4>
+                    <p style="color: #666; margin-bottom: 15px;">Add any existing medical conditions, allergies, or
+                        medications</p>
+
+                    <div id="conditionsList">
+                        <div class="condition-item">
+                            <input type="text" placeholder="Medical condition or allergy" name="medicalHistory[]">
+                            <button type="button" class="btn-remove" onclick="removeCondition(this)">Remove</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-add" onclick="addCondition()">+ Add Medical History</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Emergency Contact</h3>
+
+                <div class="emergency-contact">
+                    <h4>Emergency Contact Information</h4>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="emergencyName">Contact Name <span class="required">*</span></label>
+                            <input type="text" id="emergencyName" name="emergencyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyRelation">Relationship <span class="required">*</span></label>
+                            <input type="text" id="emergencyRelation" name="emergencyRelation" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="emergencyPhone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="emergencyPhone" name="emergencyPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyEmail">Email Address</label>
+                            <input type="email" id="emergencyEmail" name="emergencyEmail">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Account Information</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password">Password <span class="required">*</span></label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Register as Patient</button>
+        </form>
+
+        <div class="patient-info" id="patientInfo">
+            <h4>Patient Registration Details</h4>
+            <div id="patientDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        // In-memory storage for demonstration (replacing localStorage)
+        let patients = [];
+        let patientIdCounter = 1;
+
+        function goBack() {
+            alert('Navigating back to main page...');
+        }
+
+        function addCondition() {
+            const conditionsList = document.getElementById('conditionsList');
+            const conditionItem = document.createElement('div');
+            conditionItem.className = 'condition-item';
+            conditionItem.innerHTML = `
+                <input type="text" placeholder="Medical condition or allergy" name="medicalHistory[]">
+                <button type="button" class="btn-remove" onclick="removeCondition(this)">Remove</button>
+            `;
+            conditionsList.appendChild(conditionItem);
+        }
+
+        function removeCondition(button) {
+            const conditionsList = document.getElementById('conditionsList');
+            if (conditionsList.children.length > 1) {
+                button.parentElement.remove();
+            } else {
+                showMessage('error', 'At least one medical history field is required.');
+            }
+        }
+
+        function showMessage(type, message) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+
+            if (type === 'success') {
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+                successMsg.textContent = message;
+                // Scroll to top to show message
+                window.scrollTo(0, 0);
+            } else {
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+                errorMsg.textContent = message;
+                // Scroll to top to show message
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function validateForm(formData) {
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+
+            if (password !== confirmPassword) {
+                showMessage('error', 'Passwords do not match.');
+                return false;
+            }
+
+            if (password.length < 6) {
+                showMessage('error', 'Password must be at least 6 characters long.');
+                return false;
+            }
+
+            // Check if email already exists
+            const email = formData.get('email').trim();
+            const existingPatient = patients.find(p => p.email.toLowerCase() === email.toLowerCase());
+            if (existingPatient) {
+                showMessage('error', 'A patient with this email already exists.');
+                return false;
+            }
+
+            // Check if ID number already exists
+            const idNumber = formData.get('idNumber').trim();
+            const existingId = patients.find(p => p.idNumber === idNumber);
+            if (existingId) {
+                showMessage('error', 'A patient with this ID number already exists.');
+                return false;
+            }
+
+            // Validate ID number format based on type
+            const idType = formData.get('idType');
+            if (idType === 'aadhar' && (idNumber.length !== 12 || !/^\d{12}$/.test(idNumber))) {
+                showMessage('error', 'Aadhar number must be 12 digits.');
+                return false;
+            }
+
+            // Validate phone number
+            const phone = formData.get('phone').trim();
+            if (phone.length < 10 || !/^\d+$/.test(phone)) {
+                showMessage('error', 'Please enter a valid phone number (minimum 10 digits).');
+                return false;
+            }
+
+            // Validate date of birth
+            const dateOfBirth = formData.get('dateOfBirth');
+            const age = calculateAge(dateOfBirth);
+            if (age < 0 || age > 120) {
+                showMessage('error', 'Please enter a valid date of birth.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function calculateAge(dateOfBirth) {
+            const today = new Date();
+            const birthDate = new Date(dateOfBirth);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            return age;
+        }
+
+        function generatePatientId() {
+            const currentId = patientIdCounter;
+            patientIdCounter++;
+            return `PAT${String(currentId).padStart(4, '0')}`;
+        }
+
+        function displayPatientInfo(patient) {
+            const patientInfo = document.getElementById('patientInfo');
+            const patientDetails = document.getElementById('patientDetails');
+
+            patientDetails.innerHTML = `
+                <p><strong>Patient ID:</strong> ${patient.patientId}</p>
+                <p><strong>Name:</strong> ${patient.firstName} ${patient.lastName}</p>
+                <p><strong>Age:</strong> ${patient.age} years</p>
+                <p><strong>Gender:</strong> ${patient.gender}</p>
+                <p><strong>Email:</strong> ${patient.email}</p>
+                <p><strong>Phone:</strong> ${patient.phone}</p>
+                <p><strong>Blood Group:</strong> ${patient.bloodGroup || 'Not specified'}</p>
+                <p><strong>ID Type:</strong> ${patient.idType}</p>
+                <p><strong>ID Number:</strong> ${patient.idNumber}</p>
+                <p><strong>Emergency Contact:</strong> ${patient.emergencyName} (${patient.emergencyRelation}) - ${patient.emergencyPhone}</p>
+            `;
+
+            patientInfo.style.display = 'block';
+        }
+
+        function collectMedicalHistory() {
+            const medicalHistoryInputs = document.querySelectorAll('input[name="medicalHistory[]"]');
+            const medicalHistory = [];
+
+            medicalHistoryInputs.forEach(input => {
+                if (input.value.trim()) {
+                    medicalHistory.push(input.value.trim());
+                }
+            });
+
+            return medicalHistory;
+        }
+
+        function resetForm() {
+            document.getElementById('patientRegistrationForm').reset();
+            // Keep only one medical history field
+            const conditionsList = document.getElementById('conditionsList');
+            conditionsList.innerHTML = `
+                <div class="condition-item">
+                    <input type="text" placeholder="Medical condition or allergy" name="medicalHistory[]">
+                    <button type="button" class="btn-remove" onclick="removeCondition(this)">Remove</button>
+                </div>
+            `;
+        }
+
+        // Form submission handler
+        document.getElementById('patientRegistrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            if (!validateForm(formData)) {
+                return;
+            }
+
+            // Create patient object
+            const patient = {
+                patientId: generatePatientId(),
+                firstName: formData.get('firstName').trim(),
+                lastName: formData.get('lastName').trim(),
+                dateOfBirth: formData.get('dateOfBirth'),
+                age: calculateAge(formData.get('dateOfBirth')),
+                gender: formData.get('gender'),
+                phone: formData.get('phone').trim(),
+                email: formData.get('email').trim(),
+                address: formData.get('address').trim(),
+                idType: formData.get('idType'),
+                idNumber: formData.get('idNumber').trim(),
+                bloodGroup: formData.get('bloodGroup'),
+                height: formData.get('height') ? parseInt(formData.get('height')) : null,
+                weight: formData.get('weight') ? parseInt(formData.get('weight')) : null,
+                occupation: formData.get('occupation') ? formData.get('occupation').trim() : null,
+                medicalHistory: collectMedicalHistory(),
+                emergencyName: formData.get('emergencyName').trim(),
+                emergencyRelation: formData.get('emergencyRelation').trim(),
+                emergencyPhone: formData.get('emergencyPhone').trim(),
+                emergencyEmail: formData.get('emergencyEmail') ? formData.get('emergencyEmail').trim() : null,
+                password: formData.get('password'), // In real application, this should be hashed
+                registrationDate: new Date().toISOString()
+            };
+
+            // Add patient to array
+            patients.push(patient);
+
+            // Show success message
+            showMessage('success', `Registration successful! Patient ID: ${patient.patientId}. You can now book appointments with doctors.`);
+
+            // Display patient information
+            displayPatientInfo(patient);
+
+            // Reset form
+            resetForm();
+
+            console.log('Patient registered:', patient);
+            console.log('All patients:', patients);
+        });
+
+        // Set maximum date for date of birth (today)
+        document.getElementById('dateOfBirth').max = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+
+</html>

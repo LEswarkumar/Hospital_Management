@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Registration - HMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-back:hover {
+            color: #764ba2;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .departments-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .department-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .department-item input {
+            flex: 1;
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .department-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .department-item input {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="#" class="nav-back" onclick="goBack()">← Back to Main Page</a>
+
+        <div class="header">
+            <h1>Hospital Registration</h1>
+            <p>Register your hospital and set up departments</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            Hospital registered successfully! You can now manage your hospital from the admin dashboard.
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Please fill in all required fields correctly.
+        </div>
+
+        <form id="hospitalRegistrationForm">
+            <div class="form-section">
+                <h3>Hospital Information</h3>
+
+                <div class="form-group">
+                    <label for="hospitalName">Hospital Name <span class="required">*</span></label>
+                    <input type="text" id="hospitalName" name="hospitalName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="hospitalAddress">Hospital Address <span class="required">*</span></label>
+                    <textarea id="hospitalAddress" name="hospitalAddress" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="hospitalCity">City <span class="required">*</span></label>
+                    <input type="text" id="hospitalCity" name="hospitalCity" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="hospitalState">State <span class="required">*</span></label>
+                    <input type="text" id="hospitalState" name="hospitalState" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="hospitalPhone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="hospitalPhone" name="hospitalPhone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="hospitalEmail">Email Address <span class="required">*</span></label>
+                    <input type="email" id="hospitalEmail" name="hospitalEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="hospitalLicense">License Number <span class="required">*</span></label>
+                    <input type="text" id="hospitalLicense" name="hospitalLicense" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Departments</h3>
+                <p style="color: #666; margin-bottom: 20px;">Add departments available in your hospital</p>
+
+                <div class="departments-section">
+                    <div id="departmentsList">
+                        <div class="department-item">
+                            <input type="text" placeholder="Department Name (e.g., Cardiology)" name="departments[]"
+                                required>
+                            <button type="button" class="btn-remove" onclick="removeDepartment(this)">Remove</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-add" onclick="addDepartment()">+ Add Department</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Admin Information</h3>
+
+                <div class="form-group">
+                    <label for="adminName">Admin Name <span class="required">*</span></label>
+                    <input type="text" id="adminName" name="adminName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminEmail">Admin Email <span class="required">*</span></label>
+                    <input type="email" id="adminEmail" name="adminEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPhone">Admin Phone <span class="required">*</span></label>
+                    <input type="tel" id="adminPhone" name="adminPhone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPassword">Password <span class="required">*</span></label>
+                    <input type="password" id="adminPassword" name="adminPassword" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Register Hospital</button>
+        </form>
+    </div>
+
+    <script>
+        // Mock database for demonstration
+        let hospitals = JSON.parse(localStorage.getItem('hospitals')) || [];
+        let hospitalIdCounter = parseInt(localStorage.getItem('hospitalIdCounter')) || 1;
+
+        function goBack() {
+            // In a real app, this would navigate back to the main page
+            alert('Navigating back to main page...');
+        }
+
+        function addDepartment() {
+            const departmentsList = document.getElementById('departmentsList');
+            const departmentItem = document.createElement('div');
+            departmentItem.className = 'department-item';
+            departmentItem.innerHTML = `
+                <input type="text" placeholder="Department Name (e.g., Orthopedics)" name="departments[]" required>
+                <button type="button" class="btn-remove" onclick="removeDepartment(this)">Remove</button>
+            `;
+            departmentsList.appendChild(departmentItem);
+        }
+
+        function removeDepartment(button) {
+            const departmentsList = document.getElementById('departmentsList');
+            if (departmentsList.children.length > 1) {
+                button.parentElement.remove();
+            } else {
+                alert('At least one department is required.');
+            }
+        }
+
+        function showMessage(type, message) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+
+            if (type === 'success') {
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+                successMsg.textContent = message;
+            } else {
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+                errorMsg.textContent = message;
+            }
+        }
+
+        function validateForm(formData) {
+            const password = formData.get('adminPassword');
+            const confirmPassword = formData.get('confirmPassword');
+
+            if (password !== confirmPassword) {
+                showMessage('error', 'Passwords do not match.');
+                return false;
+            }
+
+            if (password.length < 6) {
+                showMessage('error', 'Password must be at least 6 characters long.');
+                return false;
+            }
+
+            const departments = formData.getAll('departments[]');
+            if (departments.length === 0 || departments.some(dept => dept.trim() === '')) {
+                showMessage('error', 'Please add at least one department.');
+                return false;
+            }
+
+            // Check if hospital name already exists
+            const hospitalName = formData.get('hospitalName').trim();
+            const existingHospital = hospitals.find(h => h.name.toLowerCase() === hospitalName.toLowerCase());
+            if (existingHospital) {
+                showMessage('error', 'A hospital with this name already exists.');
+                return false;
+            }
+
+            return true;
+        }
+
+        document.getElementById('hospitalRegistrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            if (!validateForm(formData)) {
+                return;
+            }
+
+            // Create hospital object
+            const hospital = {
+                id: hospitalIdCounter++,
+                name: formData.get('hospitalName').trim(),
+                address: formData.get('hospitalAddress').trim(),
+                city: formData.get('hospitalCity').trim(),
+                state: formData.get('hospitalState').trim(),
+                phone: formData.get('hospitalPhone').trim(),
+                email: formData.get('hospitalEmail').trim(),
+                license: formData.get('hospitalLicense').trim(),
+                departments: formData.getAll('departments[]').map(dept => dept.trim()).filter(dept => dept !== ''),
+                admin: {
+                    name: formData.get('adminName').trim(),
+                    email: formData.get('adminEmail').trim(),
+                    phone: formData.get('adminPhone').trim(),
+                    password: formData.get('adminPassword') // In real app, this would be hashed
+                },
+                registrationDate: new Date().toISOString(),
+                totalRevenue: 0,
+                totalConsultations: 0
+            };
+
+            // Save to localStorage (mock database)
+            hospitals.push(hospital);
+            localStorage.setItem('hospitals', JSON.stringify(hospitals));
+            localStorage.setItem('hospitalIdCounter', hospitalIdCounter.toString());
+
+            showMessage('success', 'Hospital registered successfully! You can now manage your hospital from the admin dashboard.');
+
+            // Reset form
+            this.reset();
+
+            // Reset departments to show only one
+            const departmentsList = document.getElementById('departmentsList');
+            departmentsList.innerHTML = `
+                <div class="department-item">
+                    <input type="text" placeholder="Department Name (e.g., Cardiology)" name="departments[]" required>
+                    <button type="button" class="btn-remove" onclick="removeDepartment(this)">Remove</button>
+                </div>
+            `;
+        });
+
+        // Add some sample departments for demonstration
+        document.addEventListener('DOMContentLoaded', function () {
+            const sampleDepartments = [
+                'Cardiology', 'Orthopedics', 'Pediatrics', 'Neurology', 'Oncology',
+                'Dermatology', 'Psychiatry', 'Radiology', 'Emergency Medicine', 'General Surgery'
+            ];
+
+            // Add datalist for department suggestions
+            const datalist = document.createElement('datalist');
+            datalist.id = 'departmentSuggestions';
+            sampleDepartments.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept;
+                datalist.appendChild(option);
+            });
+            document.body.appendChild(datalist);
+
+            // Add list attribute to department inputs
+            document.querySelectorAll('input[name="departments[]"]').forEach(input => {
+                input.setAttribute('list', 'departmentSuggestions');
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital & Appointment Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .main-header h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+        }
+
+        .user-roles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .role-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .role-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .role-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .role-card h3 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .role-card p {
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e9ecef;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .system-features {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .system-features h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .feature-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2rem;
+            }
+
+            .user-roles {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-header">
+            <h1>Hospital & Appointment Management System</h1>
+            <p>Streamline healthcare management with our comprehensive solution</p>
+        </div>
+
+        <div class="user-roles">
+            <div class="role-card">
+                <div class="role-icon">🏥</div>
+                <h3>Hospital Admin</h3>
+                <p>Manage hospital operations, departments, and view comprehensive revenue reports</p>
+                <div class="btn-group">
+                    <a href="HospitalRegistration.html" class="btn btn-primary"
+                        onclick="navigateToPage('hospital-registration')">Register Hospital</a>
+                    <a href="HospitalAdminDashboard.html" class="btn btn-secondary"
+                        onclick="navigateToPage('hospital-dashboard')">Admin Dashboard</a>
+                </div>
+            </div>
+
+            <div class="role-card">
+                <div class="role-icon">👨‍⚕️</div>
+                <h3>Doctor</h3>
+                <p>Register your practice, manage availability, and track your consultations across multiple hospitals
+                </p>
+                <div class="btn-group">
+                    <a href="DoctorRegistration.html" class="btn btn-primary"
+                        onclick="navigateToPage('doctor-registration')">Register as Doctor</a>
+                    <a href="DoctorDashboard.html" class="btn btn-secondary"
+                        onclick="navigateToPage('doctor-dashboard')">Doctor Dashboard</a>
+                </div>
+            </div>
+
+            <div class="role-card">
+                <div class="role-icon">🤒</div>
+                <h3>Patient</h3>
+                <p>Book appointments, search doctors by specialization, and manage your medical records</p>
+                <div class="btn-group">
+                    <a href="PatientRegistration.html" class="btn btn-primary"
+                        onclick="navigateToPage('patient-registration')">Register as Patient</a>
+                    <a href="PatientDashboard.html" class="btn btn-secondary"
+                        onclick="navigateToPage('patient-dashboard')">Patient Dashboard</a>
+                    <a href="BookAppointment.html" class="btn btn-secondary"
+                        onclick="navigateToPage('book-appointment')">Book Appointment</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="system-features">
+            <h2>System Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🏥 Hospital Management</h4>
+                    <p>Register hospitals, manage departments, and track performance metrics</p>
+                </div>
+                <div class="feature-item">
+                    <h4>👨‍⚕️ Doctor Profiles</h4>
+                    <p>Comprehensive doctor registration with specializations and availability</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📅 Appointment Booking</h4>
+                    <p>Seamless appointment scheduling with real-time availability</p>
+                </div>
+                <div class="feature-item">
+                    <h4>💰 Revenue Tracking</h4>
+                    <p>Automated revenue sharing (60% doctor, 40% hospital) with detailed reports</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📊 Analytics Dashboard</h4>
+                    <p>Comprehensive dashboards for all user types with key metrics</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🔍 Smart Search</h4>
+                    <p>Filter doctors by specialization, location, and availability</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple navigation system - in a real app, this would be handled by a router
+        function navigateToPage(page) {
+            // Store the current page in localStorage for demonstration
+            localStorage.setItem('currentPage', page);
+
+            // In a real application, you would use proper routing
+            // For demo purposes, we'll show an alert
+            alert(`Navigating to: ${page.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}\n\nIn the next artifact, I'll show you the ${page} page.`);
+
+            // You could also use window.location.href = page + '.html' in a real app
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.role-card');
+
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+
+</html>

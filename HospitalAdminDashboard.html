@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Admin Dashboard - HMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+        }
+
+        .hospital-info {
+            text-align: right;
+        }
+
+        .hospital-info h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .hospital-info p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e9ecef;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .revenue-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .revenue-card .stat-number {
+            color: white;
+        }
+
+        .revenue-card .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .department-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .department-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .department-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .department-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .department-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: end;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+
+            .nav-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .data-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Hospital Dashboard</h1>
+            <div class="hospital-info">
+                <h3 id="hospitalName">Loading...</h3>
+                <p id="hospitalLocation">Loading...</p>
+            </div>
+        </div>
+
+        <div class="nav-actions">
+            <button class="btn btn-primary" onclick="showAddDepartmentModal()">Add Department</button>
+            <button class="btn btn-secondary" onclick="showDoctorManagement()">Manage Doctors</button>
+            <button class="btn btn-success" onclick="exportReports()">Export Reports</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>Total Doctors</h3>
+                <div class="stat-number" id="totalDoctors">0</div>
+                <div class="stat-label">Associated Doctors</div>
+            </div>
+
+            <div class="card">
+                <h3>Total Consultations</h3>
+                <div class="stat-number" id="totalConsultations">0</div>
+                <div class="stat-label">Appointments Booked</div>
+            </div>
+
+            <div class="card revenue-card">
+                <h3>Hospital Revenue</h3>
+                <div class="stat-number" id="hospitalRevenue">₹0</div>
+                <div class="stat-label">40% of consultation fees</div>
+            </div>
+
+            <div class="card">
+                <h3>Departments</h3>
+                <div class="stat-number" id="totalDepartments">0</div>
+                <div class="stat-label">Active Departments</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Departments</h2>
+            <div class="department-grid" id="departmentGrid">
+                <!-- Departments will be populated here -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Doctor Revenue Analysis</h2>
+            <div class="filter-section">
+                <div class="filter-row">
+                    <div class="form-group">
+                        <label>Filter by Department</label>
+                        <select id="departmentFilter">
+                            <option value="">All Departments</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date Range</label>
+                        <select id="dateRangeFilter">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Doctor Name</th>
+                        <th>Specialization</th>
+                        <th>Consultations</th>
+                        <th>Doctor Revenue (60%)</th>
+                        <th>Hospital Revenue (40%)</th>
+                        <th>Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody id="doctorRevenueTable">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Department Revenue Analysis</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Total Consultations</th>
+                        <th>Total Revenue</th>
+                        <th>Hospital Share</th>
+                        <th>Average per Consultation</th>
+                    </tr>
+                </thead>
+                <tbody id="departmentRevenueTable">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Department Modal -->
+    <div id="addDepartmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addDepartmentModal')">&times;</span>
+            <h2>Add New Department</h2>
+            <form id="addDepartmentForm">
+                <div class="form-group">
+                    <label for="departmentName">Department Name</label>
+                    <input type="text" id="departmentName" name="departmentName" required>
+                </div>
+                <div class="form-group">
+                    <label for="departmentDescription">Description</label>
+                    <input type="text" id="departmentDescription" name="departmentDescription">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Department</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sample data structure
+        let hospitalData = {
+            hospitalId: 'HOSP001',
+            name: 'City General Hospital',
+            location: 'Mumbai, Maharashtra',
+            departments: [
+                { id: 'DEPT001', name: 'Cardiology', description: 'Heart and cardiovascular care' },
+                { id: 'DEPT002', name: 'Orthopedics', description: 'Bone and joint care' },
+                { id: 'DEPT003', name: 'Pediatrics', description: 'Child healthcare' },
+                { id: 'DEPT004', name: 'Neurology', description: 'Brain and nervous system' }
+            ]
+        };
+
+        let doctorsData = [
+            {
+                doctorId: 'DOC001',
+                name: 'Dr. Rajesh Kumar',
+                specialization: 'Cardiology',
+                consultationFee: 1500,
+                consultations: 45,
+                revenue: 67500
+            },
+            {
+                doctorId: 'DOC002',
+                name: 'Dr. Priya Sharma',
+                specialization: 'Pediatrics',
+                consultationFee: 1200,
+                consultations: 38,
+                revenue: 45600
+            },
+            {
+                doctorId: 'DOC003',
+                name: 'Dr. Amit Patel',
+                specialization: 'Orthopedics',
+                consultationFee: 1800,
+                consultations: 32,
+                revenue: 57600
+            },
+            {
+                doctorId: 'DOC004',
+                name: 'Dr. Sunita Verma',
+                specialization: 'Neurology',
+                consultationFee: 2000,
+                consultations: 28,
+                revenue: 56000
+            }
+        ];
+
+        let consultationsData = [
+            { doctorId: 'DOC001', patientId: 'PAT001', fee: 1500, date: '2024-01-15' },
+            { doctorId: 'DOC002', patientId: 'PAT002', fee: 1200, date: '2024-01-15' },
+            { doctorId: 'DOC003', patientId: 'PAT003', fee: 1800, date: '2024-01-14' },
+            { doctorId: 'DOC004', patientId: 'PAT004', fee: 2000, date: '2024-01-14' }
+        ];
+
+        function loadDashboard() {
+            // Load hospital information
+            document.getElementById('hospitalName').textContent = hospitalData.name;
+            document.getElementById('hospitalLocation').textContent = hospitalData.location;
+
+            // Calculate and display statistics
+            updateDashboardStats();
+
+            // Load departments
+            loadDepartments();
+
+            // Load revenue tables
+            loadDoctorRevenueTable();
+            loadDepartmentRevenueTable();
+
+            // Populate filter dropdowns
+            populateFilters();
+        }
+
+        function updateDashboardStats() {
+            const totalDoctors = doctorsData.length;
+            const totalConsultations = consultationsData.length;
+            const totalRevenue = consultationsData.reduce((sum, consultation) => sum + consultation.fee, 0);
+            const hospitalRevenue = totalRevenue * 0.4; // 40% goes to hospital
+
+            document.getElementById('totalDoctors').textContent = totalDoctors;
+            document.getElementById('totalConsultations').textContent = totalConsultations;
+            document.getElementById('hospitalRevenue').textContent = `₹${hospitalRevenue.toLocaleString()}`;
+            document.getElementById('totalDepartments').textContent = hospitalData.departments.length;
+        }
+
+        function loadDepartments() {
+            const departmentGrid = document.getElementById('departmentGrid');
+            departmentGrid.innerHTML = '';
+
+            hospitalData.departments.forEach(dept => {
+                const doctorCount = doctorsData.filter(doc => doc.specialization === dept.name).length;
+                const consultationCount = getDepartmentConsultations(dept.name);
+
+                const departmentCard = document.createElement('div');
+                departmentCard.className = 'department-card';
+                departmentCard.innerHTML = `
+                    <h4>${dept.name}</h4>
+                    <p>${dept.description}</p>
+                    <div style="margin-top: 15px;">
+                        <strong>${doctorCount}</strong> doctors<br>
+                        <strong>${consultationCount}</strong> consultations
+                    </div>
+                `;
+                departmentGrid.appendChild(departmentCard);
+            });
+        }
+
+        function getDepartmentConsultations(departmentName) {
+            const departmentDoctors = doctorsData.filter(doc => doc.specialization === departmentName);
+            return consultationsData.filter(consultation =>
+                departmentDoctors.some(doc => doc.doctorId === consultation.doctorId)
+            ).length;
+        }
+
+        function loadDoctorRevenueTable() {
+            const tableBody = document.getElementById('doctorRevenueTable');
+            tableBody.innerHTML = '';
+
+            doctorsData.forEach(doctor => {
+                const doctorConsultations = consultationsData.filter(c => c.doctorId === doctor.doctorId);
+                const totalRevenue = doctorConsultations.reduce((sum, c) => sum + c.fee, 0);
+                const doctorRevenue = totalRevenue * 0.6; // 60% to doctor
+                const hospitalRevenue = totalRevenue * 0.4; // 40% to hospital
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${doctor.name}</td>
+                    <td>${doctor.specialization}</td>
+                    <td>${doctorConsultations.length}</td>
+                    <td>₹${doctorRevenue.toLocaleString()}</td>
+                    <td>₹${hospitalRevenue.toLocaleString()}</td>
+                    <td>₹${totalRevenue.toLocaleString()}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function loadDepartmentRevenueTable() {
+            const tableBody = document.getElementById('departmentRevenueTable');
+            tableBody.innerHTML = '';
+
+            hospitalData.departments.forEach(dept => {
+                const departmentDoctors = doctorsData.filter(doc => doc.specialization === dept.name);
+                const departmentConsultations = consultationsData.filter(consultation =>
+                    departmentDoctors.some(doc => doc.doctorId === consultation.doctorId)
+                );
+
+                const totalRevenue = departmentConsultations.reduce((sum, c) => sum + c.fee, 0);
+                const hospitalShare = totalRevenue * 0.4;
+                const avgPerConsultation = departmentConsultations.length > 0 ?
+                    totalRevenue / departmentConsultations.length : 0;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${dept.name}</td>
+                    <td>${departmentConsultations.length}</td>
+                    <td>₹${totalRevenue.toLocaleString()}</td>
+                    <td>₹${hospitalShare.toLocaleString()}</td>
+                    <td>₹${avgPerConsultation.toLocaleString()}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function populateFilters() {
+            const departmentFilter = document.getElementById('departmentFilter');
+            departmentFilter.innerHTML = '<option value="">All Departments</option>';
+
+            hospitalData.departments.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept.name;
+                option.textContent = dept.name;
+                departmentFilter.appendChild(option);
+            });
+        }
+
+        function showAddDepartmentModal() {
+            document.getElementById('addDepartmentModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showDoctorManagement() {
+            alert('Doctor Management feature - This would open a page to manage doctor associations and approvals');
+        }
+
+        function exportReports() {
+            alert('Export Reports feature - This would generate and download comprehensive reports');
+        }
+
+        function applyFilters() {
+            const departmentFilter = document.getElementById('departmentFilter').value;
+            const dateRangeFilter = document.getElementById('dateRangeFilter').value;
+
+            // Filter logic would be implemented here
+            console.log('Applying filters:', { departmentFilter, dateRangeFilter });
+
+            // For now, just reload the tables
+            loadDoctorRevenueTable();
+            loadDepartmentRevenueTable();
+        }
+
+        // Add Department Form Handler
+        document.getElementById('addDepartmentForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const newDepartment = {
+                id: 'DEPT' + String(hospitalData.departments.length + 1).padStart(3, '0'),
+                name: formData.get('departmentName'),
+                description: formData.get('departmentDescription') || ''
+            };
+
+            hospitalData.departments.push(newDepartment);
+
+            alert('Department added successfully!');
+            closeModal('addDepartmentModal');
+            this.reset();
+
+            // Reload dashboard
+            loadDashboard();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+
+</html>

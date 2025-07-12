@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration - HMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-back:hover {
+            color: #764ba2;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .specializations-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .specialization-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .specialization-item input {
+            flex: 1;
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .file-upload {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .file-upload:hover {
+            background: #e9ecef;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .specialization-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .specialization-item input {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="#" class="nav-back" onclick="goBack()">← Back to Main Page</a>
+
+        <div class="header">
+            <h1>Doctor Registration</h1>
+            <p>Join our network of healthcare professionals</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            Registration successful! You can now associate with hospitals and manage your practice.
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Please fill in all required fields correctly.
+        </div>
+
+        <form id="doctorRegistrationForm">
+            <div class="form-section">
+                <h3>Personal Information</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender <span class="required">*</span></label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address <span class="required">*</span></label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Professional Information</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="medicalLicense">Medical License Number <span class="required">*</span></label>
+                        <input type="text" id="medicalLicense" name="medicalLicense" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="yearsOfExperience">Years of Experience <span class="required">*</span></label>
+                        <input type="number" id="yearsOfExperience" name="yearsOfExperience" min="0" max="50" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="qualifications">Qualifications <span class="required">*</span></label>
+                    <textarea id="qualifications" name="qualifications" rows="3"
+                        placeholder="e.g., MBBS, MD, Fellowship in Cardiology" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Specializations <span class="required">*</span></label>
+                    <p style="color: #666; margin-bottom: 15px;">Add your medical specializations</p>
+
+                    <div class="specializations-section">
+                        <div id="specializationsList">
+                            <div class="specialization-item">
+                                <input type="text" placeholder="Specialization (e.g., Cardiology)"
+                                    name="specializations[]" required>
+                                <button type="button" class="btn-remove"
+                                    onclick="removeSpecialization(this)">Remove</button>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-add" onclick="addSpecialization()">+ Add
+                            Specialization</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="profileImage">Profile Image</label>
+                    <div class="file-upload" onclick="document.getElementById('profileImage').click()">
+                        <div class="upload-icon">📷</div>
+                        <p>Click to upload profile image</p>
+                        <input type="file" id="profileImage" name="profileImage" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Professional Bio</label>
+                    <textarea id="bio" name="bio" rows="4"
+                        placeholder="Brief description of your medical practice and expertise"></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Account Information</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password">Password <span class="required">*</span></label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Register as Doctor</button>
+        </form>
+    </div>
+
+    <script>
+        // Mock database for demonstration
+        let doctors = JSON.parse(localStorage.getItem('doctors')) || [];
+        let doctorIdCounter = parseInt(localStorage.getItem('doctorIdCounter')) || 1;
+
+        function goBack() {
+            alert('Navigating back to main page...');
+        }
+
+        function addSpecialization() {
+            const specializationsList = document.getElementById('specializationsList');
+            const specializationItem = document.createElement('div');
+            specializationItem.className = 'specialization-item';
+            specializationItem.innerHTML = `
+                <input type="text" placeholder="Specialization (e.g., Neurology)" name="specializations[]" required>
+                <button type="button" class="btn-remove" onclick="removeSpecialization(this)">Remove</button>
+            `;
+            specializationsList.appendChild(specializationItem);
+        }
+
+        function removeSpecialization(button) {
+            const specializationsList = document.getElementById('specializationsList');
+            if (specializationsList.children.length > 1) {
+                button.parentElement.remove();
+            } else {
+                alert('At least one specialization is required.');
+            }
+        }
+
+        function showMessage(type, message) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+
+            if (type === 'success') {
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+                successMsg.textContent = message;
+            } else {
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+                errorMsg.textContent = message;
+            }
+        }
+
+        function validateForm(formData) {
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+
+            if (password !== confirmPassword) {
+                showMessage('error', 'Passwords do not match.');
+                return false;
+            }
+
+            if (password.length < 6) {
+                showMessage('error', 'Password must be at least 6 characters long.');
+                return false;
+            }
+
+            const specializations = formData.getAll('specializations[]');
+            if (specializations.length === 0 || specializations.some(spec => spec.trim() === '')) {
+                showMessage('error', 'Please add at least one specialization.');
+                return false;
+            }
+
+            // Check if email already exists
+            const email = formData.get('email').trim();
+            const existingDoctor = doctors.find(d => d.email.toLowerCase() === email.toLowerCase());
+            if (existingDoctor) {
+                showMessage('error', 'A doctor with this email already exists.');
+                return false;
+            }
+
+            // Check if medical license already exists
+            const license = formData.get('medicalLicense').trim();
+            const existingLicense = doctors.find(d => d.medicalLicense === license);
+            if (existingLicense) {
+                showMessage('error', 'A doctor with this medical license already exists.');
+                return false;
+            }
+
+            // Validate date of birth (must be at least 22 years old)
+            const dob = new Date(formData.get('dateOfBirth'));
+            const today = new Date();
+            const age = today.getFullYear() - dob.getFullYear();
+            if (age < 22) {
+                showMessage('error', 'Doctor must be at least 22 years old.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function calculateAge(dateOfBirth) {
+            const today = new Date();
+            const birthDate = new Date(dateOfBirth);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            return age;
+        }
+
+        document.getElementById('doctorRegistrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            if (!validateForm(formData)) {
+                return;
+            }
+
+            // Create doctor object
+            const doctor = {
+                id: doctorIdCounter++,
+                firstName: formData.get('firstName').trim(),
+                lastName: formData.get('lastName').trim(),
+                email: formData.get('email').trim(),
+                phone: formData.get('phone').trim(),
+                dateOfBirth: formData.get('dateOfBirth'),
+                age: calculateAge(formData.get('dateOfBirth')),
+                gender: formData.get('gender'),
+                address: formData.get('address').trim(),
+                medicalLicense: formData.get('medicalLicense').trim(),
+                yearsOfExperience: parseInt(formData.get('yearsOfExperience')),
+                qualifications: formData.get('qualifications').trim(),
+                specializations: formData.getAll('specializations[]').map(spec => spec.trim()).filter(spec => spec !== ''),
+                bio: formData.get('bio').trim(),
+                password: formData.get('password'), // In real app, this would be hashed
+                registrationDate: new Date().toISOString(),
+                isVerified: false,
+                totalEarnings: 0,
+                totalConsultations: 0,
+                hospitalAssociations: [], // Will be populated when doctor associates with hospitals
+                availability: [], // Will be populated when doctor sets availability
+                ratings: {
+                    average: 0,
+                    total: 0,
+                    reviews: []
+                }
+            };
+
+            // Handle profile image (in real app, this would be uploaded to server)
+            const profileImage = formData.get('profileImage');
+            if (profileImage && profileImage.size > 0) {
+                doctor.profileImage = `profile_${doctor.id}_${profileImage.name}`;
+            }
+
+            // Save to localStorage (mock database)
+            doctors.push(doctor);
+            localStorage.setItem('doctors', JSON.stringify(doctors));
+            localStorage.setItem('doctorIdCounter', doctorIdCounter.toString());
+
+            showMessage('success', 'Registration successful! You can now associate with hospitals and manage your practice.');
+
+            // Reset form
+            this.reset();
+
+            // Reset specializations to show only one
+            const specializationsList = document.getElementById('specializationsList');
+            specializationsList.innerHTML = `
+                <div class="specialization-item">
+                    <input type="text" placeholder="Specialization (e.g., Cardiology)" name="specializations[]" required>
+                    <button type="button" class="btn-remove" onclick="removeSpecialization(this)">Remove</button>
+                </div>
+            `;
+
+            // Clear file upload display
+            const fileUpload = document.querySelector('.file-upload');
+            fileUpload.innerHTML = `
+                <div class="upload-icon">📷</div>
+                <p>Click to upload profile image</p>
+                <input type="file" id="profileImage" name="profileImage" accept="image/*">
+            `;
+        });
+
+        // Handle file upload display
+        document.getElementById('profileImage').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            const fileUpload = document.querySelector('.file-upload');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    fileUpload.innerHTML = `
+                        <img src="${e.target.result}" alt="Profile Preview" style="max-width: 100px; max-height: 100px; border-radius: 50%; margin-bottom: 10px;">
+                        <p>Profile image selected: ${file.name}</p>
+                        <p style="font-size: 0.9rem; color: #666;">Click to change</p>
+                        <input type="file" id="profileImage" name="profileImage" accept="image/*">
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Add sample specializations for demonstration
+        document.addEventListener('DOMContentLoaded', function () {
+            const sampleSpecializations = [
+                'Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'Oncology',
+                'Dermatology', 'Psychiatry', 'Radiology', 'Emergency Medicine', 'General Surgery',
+                'Gastroenterology', 'Endocrinology', 'Pulmonology', 'Nephrology', 'Urology',
+                'Ophthalmology', 'ENT', 'Anesthesiology', 'Pathology', 'Internal Medicine'
+            ];
+
+            // Add datalist for specialization suggestions
+            const datalist = document.createElement('datalist');
+            datalist.id = 'specializationSuggestions';
+            sampleSpecializations.forEach(spec => {
+                const option = document.createElement('option');
+                option.value = spec;
+                datalist.appendChild(option);
+            });
+            document.body.appendChild(datalist);
+
+            // Add list attribute to specialization inputs
+            document.querySelectorAll('input[name="specializations[]"]').forEach(input => {
+                input.setAttribute('list', 'specializationSuggestions');
+            });
+        });
+
+        // Real-time validation feedback
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+
+            if (confirmPassword && password !== confirmPassword) {
+                this.style.borderColor = '#dc3545';
+            } else {
+                this.style.borderColor = '#28a745';
+            }
+        });
+
+        document.getElementById('email').addEventListener('blur', function () {
+            const email = this.value.trim();
+            if (email) {
+                const existingDoctor = doctors.find(d => d.email.toLowerCase() === email.toLowerCase());
+                if (existingDoctor) {
+                    this.style.borderColor = '#dc3545';
+                    showMessage('error', 'A doctor with this email already exists.');
+                } else {
+                    this.style.borderColor = '#28a745';
+                }
+            }
+        });
+
+        document.getElementById('medicalLicense').addEventListener('blur', function () {
+            const license = this.value.trim();
+            if (license) {
+                const existingLicense = doctors.find(d => d.medicalLicense === license);
+                if (existingLicense) {
+                    this.style.borderColor = '#dc3545';
+                    showMessage('error', 'A doctor with this medical license already exists.');
+                } else {
+                    this.style.borderColor = '#28a745';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

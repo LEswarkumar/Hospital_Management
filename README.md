@@ -1,1 +1,1 @@
-# Hospital_Management
+# Hospital_Mangement
